@@ -1,15 +1,23 @@
 import React from "react";
-import logo from "./images/afterwork_planner.jpeg";
-import "./App.css";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+
+import LoginView from "./views/LoginView";
+import Dashboard from "./views/Dashboard";
+import CreateEvent from './views/CreateEvent';
+import EventView from './views/EventView';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Afterwork Planner</h1>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={LoginView} />
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/event/create" component={CreateEvent} />
+        <Route exact path="/events/:eventId" component={EventView} />
+        <Route component={() => "HTTP 404 - Not found"} />
+      </Switch>
+    </Router>
   );
 }
 
