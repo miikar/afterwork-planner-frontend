@@ -1,5 +1,5 @@
-import firebase from 'firebase/app';
-// import 'firebase/firestore';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 const config = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -12,7 +12,7 @@ const config = {
 };
 
 var firebaseApp = firebase.initializeApp(config)
-
+var db = firebaseApp.firestore()
 
 // // class Firebase {
 // //     constructor() {
@@ -43,4 +43,4 @@ var firebaseApp = firebase.initializeApp(config)
 // // }
 
 // // export const db = firebase.firestore()
-export default firebaseApp;
+export { firebaseApp, db }

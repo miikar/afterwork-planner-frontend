@@ -3,7 +3,7 @@ import "../App.css";
 import './LoginView.css';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
-import firebaseApp from '../Firebase/firebase'
+import { firebaseApp } from '../Firebase/firebase'
 
 const uiConfig = {
     signInFlow: 'redirect',
