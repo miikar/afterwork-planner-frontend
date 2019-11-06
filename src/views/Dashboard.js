@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { db } from '../Firebase/firebase';
 import './Dashboard.css'
+import EventListItem from '../components/eventListItem';
 
 class Dashboard extends Component {
 
@@ -48,22 +49,10 @@ class Dashboard extends Component {
                 </header>
     
                 <div className="content">
+                    <h1>Upcoming events</h1>
                     <div className="event-list">
                         {eventList.map((item) => {
-                            return(
-                            <div key={item.key} className="event-list-item">
-                                <div className="container">
-                                <div className="row">
-                                    <div className="col">
-                                    {item.name}
-                                    </div>
-                                    <div className="col">
-                                    {item.description}
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            )
+                            return <EventListItem item={item} handleClick={() => this.props.history.push(`/events/${item.name}`)} />;
                         })}
                     </div>
                 </div>
