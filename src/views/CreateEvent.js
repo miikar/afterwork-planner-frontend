@@ -81,13 +81,18 @@ class CreateEvent extends Component {
     render() {
         const { name, description } = this.state;
         return (
-            <div className="container">
-                <header>
-                    <h1>Afterwork Planner</h1>
-                </header>
+            <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-8 col-md-offset-2">
+                    <div className="col-md-12">
+                        <header>
+                            <h1>Afterwork Planner</h1>
+                        </header>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-6 offset-md-3">
                         <div className="create-form-container">
+                            <h1>Create an event</h1>
                             <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
                                     <label htmlFor="inputEventName">Name</label>
