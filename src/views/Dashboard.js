@@ -52,7 +52,8 @@ class Dashboard extends Component {
                     <h1>Upcoming events</h1>
                     <div className="event-list">
                         {eventList.map((item) => {
-                            return <EventListItem item={item} handleClick={() => this.props.history.push(`/events/${item.name}`)} />;
+                            console.log(item);
+                            return <EventListItem item={item} handleClick={() => this.props.history.push(`/events/${item.key}`)} />;
                         })}
                     </div>
                 </div>
