@@ -1,9 +1,9 @@
 import React from "react";
 
-import FormInput from "../form-input/form-input.component";
-import CustomButton from "../custom-button/custom-button.component";
+import FormInput from "./form-input.component";
+import CustomButton from "./custom-button.component";
 
-import { auth, createUserProfileDocument } from "../../Firebase/firebase";
+import { firebaseApp, createUserProfileDocument } from "../Firebase/firebase";
 
 import "./sign-up.styles.scss";
 
@@ -30,7 +30,7 @@ class SignUp extends React.Component {
     }
 
     try {
-      const { user } = await auth.createUserWithEmailAndPassword(
+      const { user } = await firebaseApp.auth().createUserWithEmailAndPassword(
         email,
         password
       );

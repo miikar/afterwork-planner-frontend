@@ -11,43 +11,18 @@ const config = {
   messagingSenderId: "233506087384"
 };
 
-var firebaseApp = firebase.initializeApp(config);
-var db = firebaseApp.firestore();
-const auth = firebase.auth();
+const firebaseApp = firebase.initializeApp(config);
+const db = firebaseApp.firestore();
+
+const auth = firebaseApp.auth()
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
-
 const signInWithGoogle = () => auth.signInWithPopup(provider);
 
-// // class Firebase {
-// //     constructor() {
-// //         app.initializeApp(config);
-// //         this.auth = app.auth();
-// //         this.db = app.firestore();
-// //     }
 
-// //     startFirebaseUI = () => {
-// //         const ui = new firebaseui.auth.AuthUI(this.auth)
-// //         ui.start('#firebaseui-auth-container', uiConfig)
-// //     }
-
-// //     // Firebase auth
-// //     doCreateUserWithEmailAndPassword = (email, password) =>
-// //         this.auth.createUserWithEmailAndPassword(email.password);
-
-// //     doSignInWithEmailAndPassword = (email, password) =>
-// //         this.auth.signInWithEmailAndPassword(email.password);
-
-// //     doSignOut = () => this.auth.signOut();
-
-// //     doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
-
-// //     doPasswordUpdate = password =>
-// //          this.auth.currentUser.updatePassword(password);
-// // }
-
-// // export const db = firebase.firestore()
 export const createUserProfileDocument = async (userAuth, additionalData) => {
+  console.log("useAUTH")
+  console.log(userAuth)
   if (!userAuth) return;
 
   const userRef = db.doc(`users/${userAuth.uid}`);
@@ -72,4 +47,4 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   return userRef;
 };
 
-export { firebaseApp, db, signInWithGoogle, auth };
+export { firebaseApp, auth, db, signInWithGoogle };
