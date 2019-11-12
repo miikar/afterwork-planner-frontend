@@ -14,17 +14,6 @@ class Account extends Component {
       currentUser: null
     };
 
-    // const userRef = db.doc(`users/${firebaseApp.auth().currentUser.uid}`);
-    // userRef.get().then((doc) => {
-    //     console.log(doc.data())
-    //     this.state.currentUser = {
-    //       id: doc.id,
-    //       ...doc.data()
-    //     }
-    //   }
-    // )
-    // console.log("dASD")
-    // console.log(this.state)
   }
   
   onEventsUpdate = querySnapshot => {
@@ -62,10 +51,8 @@ class Account extends Component {
   };
   
   componentDidMount() {
-    console.log("ASD");
     const userRef = db.doc(`users/${firebaseApp.auth().currentUser.uid}`);
     userRef.get().then((doc) => {
-        console.log(doc.data())
         this.setState({
           currentUser: {
             id: doc.id,
@@ -86,8 +73,6 @@ class Account extends Component {
   
   render() {
     const { events, currentUser } = this.state;
-    console.log("RENDERING")
-    console.log(currentUser)
     return (
       <div>
         <header>

@@ -21,8 +21,6 @@ const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
-  console.log("useAUTH")
-  console.log(userAuth)
   if (!userAuth) return;
 
   const userRef = db.doc(`users/${userAuth.uid}`);

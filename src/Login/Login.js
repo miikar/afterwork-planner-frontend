@@ -5,7 +5,6 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 
 function Login() {
-    console.log("WTF")
     return(
         <Router>
             <div className="App">
