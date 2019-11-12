@@ -6,6 +6,8 @@ import Account from "./views/Account";
 import CreateEvent from "./views/CreateEvent";
 import EventView from "./views/EventView";
 
+import DateVote from "./views/DateVote";
+
 class App extends React.Component {
   constructor() {
     super();
@@ -27,6 +29,7 @@ class App extends React.Component {
               <Route exact path="/account" component={Account} />
               <Route exact path="/event/create" component={CreateEvent} />
               <Route exact path="/events/:eventId" component={EventView} />
+              <Route exact path="/test" component={DateVote} />
               <Route path="*" render={() => (<Redirect to="/dashboard" />)} />
               {/* <Route component={() => "HTTP 404 - Not found"} /> */}
             </Switch>
