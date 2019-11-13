@@ -20,7 +20,7 @@ header * {
     border: solid;
     padding: 12px;
     margin: 12px;
-    height: 64px;
+    /*height: 64px;*/
     scroll-snap-align: start;
 }
   
