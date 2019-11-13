@@ -1,45 +1,48 @@
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
+import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
 
 const config = {
-    apiKey: "AIzaSyB9BcDEFJWfjzSfH3Iyh1kXCPPsdt0ioFk",
-    authDomain: "afterwork-planner.firebaseapp.com",
-    databaseURL: "https://afterwork-planner.firebaseio.com",
-    projectId: "afterwork-planner",
-    storageBucket: "afterwork-planner.appspot.com",
-    messagingSenderId: "233506087384",
+  apiKey: "AIzaSyB9BcDEFJWfjzSfH3Iyh1kXCPPsdt0ioFk",
+  authDomain: "afterwork-planner.firebaseapp.com",
+  databaseURL: "https://afterwork-planner.firebaseio.com",
+  projectId: "afterwork-planner",
+  storageBucket: "afterwork-planner.appspot.com",
+  messagingSenderId: "233506087384"
 };
 
-var firebaseApp = firebase.initializeApp(config)
-var db = firebaseApp.firestore()
+const firebaseApp = firebase.initializeApp(config);
+const db = firebaseApp.firestore();
 
-// // class Firebase {
-// //     constructor() {
-// //         app.initializeApp(config);
-// //         this.auth = app.auth();
-// //         this.db = app.firestore();
-// //     }
-
-// //     startFirebaseUI = () => {
-// //         const ui = new firebaseui.auth.AuthUI(this.auth)
-// //         ui.start('#firebaseui-auth-container', uiConfig)
-// //     }
+const auth = firebaseApp.auth()
+const provider = new firebase.auth.GoogleAuthProvider();
+provider.setCustomParameters({ prompt: "select_account" });
+const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 
-// //     // Firebase auth
-// //     doCreateUserWithEmailAndPassword = (email, password) => 
-// //         this.auth.createUserWithEmailAndPassword(email.password);
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
 
-// //     doSignInWithEmailAndPassword = (email, password) =>
-// //         this.auth.signInWithEmailAndPassword(email.password);
+  const userRef = db.doc(`users/${userAuth.uid}`);
 
-// //     doSignOut = () => this.auth.signOut();
+  const snapShot = await userRef.get();
 
-// //     doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
-  
-// //     doPasswordUpdate = password =>
-// //          this.auth.currentUser.updatePassword(password);
-// // }
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData
+      });
+    } catch (error) {
+      console.log("error creating user", error.message);
+    }
+  }
 
-// // export const db = firebase.firestore()
-export { firebaseApp, db }
+  return userRef;
+};
+
+export { firebaseApp, auth, db, signInWithGoogle };

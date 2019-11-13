@@ -63,7 +63,6 @@ class EventView extends Component {
             </div>
         );
     }
-
 }
 
 export default EventView;

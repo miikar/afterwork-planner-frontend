@@ -4,36 +4,35 @@ import './Dashboard.css'
 import EventListItem from '../components/eventListItem';
 
 class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.ref = db.collection("events");
+    this.unsubscribe = null;
+    this.state = {
+      eventList: []
+    };
+  }
 
-    constructor(props) {
-        super(props);
-        this.ref = db.collection('events');
-        this.unsubscribe = null;
-        this.state = {
-            eventList: []
-        }
-    }
+  onCollectionUpdate = querySnapshot => {
+    const eventList = [];
+    querySnapshot.forEach(doc => {
+      const { name, description } = doc.data();
+      eventList.push({
+        key: doc.id,
+        doc, // DocumentSnapshot
+        name,
+        description
+      });
+    });
 
-    onCollectionUpdate = (querySnapshot) => {
-        const eventList = [];
-        querySnapshot.forEach((doc) => {
-          const { name, description } = doc.data();
-          eventList.push({
-            key: doc.id,
-            doc, // DocumentSnapshot
-            name,
-            description,
-          });
-        });
+    this.setState({
+      eventList
+    });
+  };
 
-        this.setState({
-          eventList
-       });
-      }
-    
-      componentDidMount() {
-        this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-      }
+  componentDidMount() {
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+  }
 
     render() {
         const { eventList } = this.state;
@@ -42,8 +41,12 @@ class Dashboard extends Component {
                 <header>
                     <nav className="navbar">
                         <ul className="nav container d-flex">
-                        <li className="nav-item active"><a href="/event/create">New</a></li>
-                        <li className="nav-item"><a href="/">Account</a></li>
+                            <li className="nav-item active">
+                                <a href="/event/create">New</a>
+                            </li>
+                            <li className="nav-item">
+                                <a href="/">Account</a>
+                            </li>
                         </ul>
                     </nav>
                 </header>
@@ -57,9 +60,9 @@ class Dashboard extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
-
+  
 }
 
 export default Dashboard;
