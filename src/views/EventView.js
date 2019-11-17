@@ -6,7 +6,8 @@ class EventView extends Component {
         super(props);
         this.state = {
             loading: true,
-            user: null
+            user: null,
+            joined: false
         };
         firebaseApp.auth().onAuthStateChanged(user => this.state.uid = user.uid);
     }
@@ -31,6 +32,10 @@ class EventView extends Component {
         }
     }
 
+    isInterested = () => {
+        return this.state.interested && this.state.interested.includes(this.state.uid);
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -51,8 +56,8 @@ class EventView extends Component {
                                 </>
                             }
 
-                            <button className={'btn btn-' + (this.state.joined ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
-                                {this.state.joined ? 'Joined' : 'Join'}
+                            <button disabled={this.isInterested()} className={'btn btn-' + (this.isInterested() ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
+                                { this.isInterested() ? 'Joined' : 'Join'}
                             </button>
                         </>
                         :
