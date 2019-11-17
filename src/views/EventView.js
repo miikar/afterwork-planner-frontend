@@ -22,13 +22,26 @@ class EventView extends Component {
 
     handleJoinClick = async () => {
         const update = {
-            interested: this.state.interested ? [...this.state.interested, this.state.uid] : [this.state.uid]
+            interested: this.state.interested ? [...this.state.interested, this.state.uid] : [this.state.uid] // risk of race condition when multiple users try to join at once.
         };
         try {
             await db.collection('events').doc(this.props.match.params.eventId).update(update);
             this.setState({ joined: true});
         } catch (err) {
             this.setState({ error: 'Could not join the event', showError: true });
+        }
+    }
+
+    handleConfirmClick = async () => {
+        const update = {
+            confirmed: this.state.confirmed ? [...this.state.confirmed, this.state.uid] : [this.state.uid]
+        }
+
+        try {
+            await db.collection('events').doc(this.props.match.params.eventId).update(update);
+            this.setState({ confirmed: true });
+        } catch (err) {
+            this.setState({ error: 'Could not confirm participation.', showError: true });
         }
     }
 
@@ -55,10 +68,13 @@ class EventView extends Component {
                                     </ul>
                                 </>
                             }
-
-                            <button disabled={this.isInterested()} className={'btn btn-' + (this.isInterested() ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
-                                { this.isInterested() ? 'Joined' : 'Join'}
-                            </button>
+                            { !this.state.interested || this.state.interested.length < +(this.state.threshold) ?
+                                <button disabled={this.isInterested()} className={'btn btn-' + (this.isInterested() ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
+                                    { this.isInterested() ? 'Joined' : 'Join'}
+                                </button>
+                            :
+                                <button className="btn btn-primary" onClick={this.handleConfirmClick}>Confirm</button>
+                            }
                         </>
                         :
                         <p>Loading...</p>
