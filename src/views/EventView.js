@@ -72,8 +72,9 @@ class EventView extends Component {
                                 <button disabled={this.isInterested()} className={'btn btn-' + (this.isInterested() ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
                                     { this.isInterested() ? 'Joined' : 'Join'}
                                 </button>
-                            :
-                                <button className="btn btn-primary" onClick={this.handleConfirmClick}>Confirm</button>
+                            :   <>  <p>Please confirm your participation in this event.</p>
+                                    <button className="btn btn-primary" onClick={this.handleConfirmClick}>Confirm</button>
+                                </>
                             }
                         </>
                         :
