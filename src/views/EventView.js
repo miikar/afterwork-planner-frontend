@@ -49,6 +49,10 @@ class EventView extends Component {
         return this.state.interested && this.state.interested.includes(this.state.uid);
     }
 
+    isConfirmed = () => {
+        return this.state.confirmed && this.state.confirmed.includes(this.state.uid);
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -73,7 +77,7 @@ class EventView extends Component {
                                     { this.isInterested() ? 'Joined' : 'Join'}
                                 </button>
                             :   <>  <p>Please confirm your participation in this event.</p>
-                                    <button className="btn btn-primary" onClick={this.handleConfirmClick}>Confirm</button>
+                                    <button disabled={this.isConfirmed()} className="btn btn-primary" onClick={this.handleConfirmClick}>Confirm</button>
                                 </>
                             }
                         </>
