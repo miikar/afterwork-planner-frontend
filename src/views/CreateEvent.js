@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { db } from '../Firebase/firebase';
+import { auth, db } from '../Firebase/firebase';
 import firebase from 'firebase';
 
 class CreateEvent extends Component {
@@ -17,6 +17,7 @@ class CreateEvent extends Component {
     }
 
     onChange = (e) => {
+        console.log("CHANGE STATE1")
         const state = this.state;
         state[e.target.name]  = e.target.value;
         this.setState(state);
@@ -31,14 +32,11 @@ class CreateEvent extends Component {
     }
 
     updateDates = (e) => {
-        const date = e.target.value;
-        
-        // if date has not been picked yet,
-        if (!this.state.dates.includes(date)) {
-            this.setState({
-            dates: [...this.state.dates, {date: date, votes: 0}]   
-            });
-        }
+        const updatedDates = [...this.state.dates];
+        updatedDates[e.target.dataset.index] = {date: e.target.value, writeonly: auth.currentUser.uid, votes: [auth.currentUser.uid]}
+        this.setState({
+            dates: updatedDates
+        });
     }
 
     onSubmit = (e) => {
@@ -72,22 +70,43 @@ class CreateEvent extends Component {
             console.error("Error creating event: ", error);
         });
       }
-    
+
+    addDate = () => {
+        this.setState((prevState) => ({
+            dates: [...prevState.dates, {date: null}]
+        }))
+    }
+
+    removeDate = (e) => {
+        e.preventDefault()
+        const updatedDates = [...this.state.dates];
+        updatedDates.splice(e.target.dataset.index,1);
+        this.setState({
+            dates: updatedDates
+        });
+    }
 
     renderDateFields = () => {
-        const preFilled = this.state.dates.map(date => {
-            return (
-                <>
-                    <input type="date" className="form-control" defaultValue={date} onChange={this.updateDates} key={date}/>
-                </>
-            );
-        });
-
         return (
-            <>
-                { preFilled }
-                <input type="date" className="form-control" onChange={this.updateDates} />
-            </>
+            <div className="container-fluid">
+                {this.state.dates.map((date, index) => {
+                    return (
+                        <div key={index} className="row">
+                            <div className="col-8">
+                                <input type="date" className="form-control" data-index={index} defaultValue={date} onChange={this.updateDates}/>
+                            </div>
+                            <div className="col-2">
+                                <button className="btn btn-xs btn-danger" data-index={index} onClick={this.removeDate}>X</button>
+                            </div>
+                        </div>
+                    )
+                })}
+                <input
+                    className="btn btn-primary"
+                    type="button" 
+                    value="Add date"
+                    onClick={this.addDate}/>
+            </div>
         );
     }
 

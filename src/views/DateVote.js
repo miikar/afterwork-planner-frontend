@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DateItem from './DateItem';
+import { db } from '../Firebase/firebase';
 
 const INIT_STATE = {
     dates: [
@@ -37,16 +38,37 @@ function DateVote({ currentUser, eventId }) {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
     }
 
-    // useEffect(() => {
-    //     function handleAddDate() {
-    //         setDates({
-    //             dates: [...dates, {date: null, votes: 0}]
-    //         })
-    //     }
-    // }, [])
+    useEffect(() => {
+        console.log("ASDASDADS")
+        console.log(eventId)
+        function handleEventUpdate(fetchDates) {
+            // Merge local state so that db snapshots don't override pending votes
+            
+            const rest = [];
+            const updateLocal = fetchDates.map(item => {
+                const index = state.dates.findIndex((d => d.date === item.date))
+                console.log(index)
+                if (index !== null) {
+                    return {...item, votes: [...item.votes, ...state.dates[index].votes]}
+                }
+            })
+            console.log("TEST")
+            console.log(fetchDates)
+            console.log(state.dates)
+            console.log([...updateLocal, ...rest])
+            setDates({
+                // dates: [...fetchDates, ...state.dates]
+            });
+        }
+
+        return db.collection('events').doc(eventId)
+            .onSnapshot(event => {
+                handleEventUpdate(event.data().dates)
+            })
+    });
 
     return(
         <div className="container-fluid">
