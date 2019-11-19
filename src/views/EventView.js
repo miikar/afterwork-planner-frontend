@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { db, firebaseApp } from '../Firebase/firebase';
+import DateVote from './DateVote';
 
 class EventView extends Component {
     constructor(props) {
         super(props);
+        this.eventListener = null;
         this.state = {
             loading: true,
-            user: null
+            user: null,
+            joined: false,
         };
         firebaseApp.auth().onAuthStateChanged(user => this.state.uid = user.uid);
     }
@@ -17,6 +20,12 @@ class EventView extends Component {
             ...this.ref.data(),
              loading: false
         });
+
+        this.eventListener = db.collection('events').doc(this.props.match.params.eventId)
+            .onSnapshot(doc => {
+                console.log("interested")
+                console.log(doc.data())
+            });
     }
 
     handleJoinClick = async () => {
@@ -31,34 +40,37 @@ class EventView extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this.eventListener();
+    }
+
     render() {
+        const { user, name, description, dates } = this.state
+
         return (
             <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-6 offset-md-3">
-                        { !this.state.loading ?
-                        <>
-                            <h1>{ this.state.name }</h1>
-                            <p>{ this.state.description }</p>
+                <div>
+                    { !this.state.loading ?
+                    <>
+                        <h1>{ this.state.name }</h1>
+                        <p>{ this.state.description }</p>
 
-                            { this.state.showError && <div class="alert alert-danger">{this.state.error}</div>}
-                            { this.state.dates && this.state.dates.length > 0 &&
-                                <>
-                                    <h3>Suggested dates for event</h3>
-                                    <ul>
-                                        { this.state.dates.map(date => <li key={date.date}>{date.date}</li>) }
-                                    </ul>
-                                </>
-                            }
-
-                            <button className={'btn btn-' + (this.state.joined ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
-                                {this.state.joined ? 'Joined' : 'Join'}
-                            </button>
-                        </>
-                        :
-                        <p>Loading...</p>
+                        { this.state.showError && <div class="alert alert-danger">{this.state.error}</div>}
+                        { this.state.dates && this.state.dates.length > 0 &&
+                            <>
+                                <h3>Scheduling</h3>
+                                <DateVote currentUser={user} eventId={this.props.match.params.eventId} />
+                                {/* { this.state.dates.map(date => <li key={date.date}>{date.date}</li>) } */}
+                            </>
                         }
-                    </div>
+
+                        <button style={{display: 'block', marginTop: '16px'}} className={'btn btn-' + (this.state.joined ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
+                            {this.state.joined ? 'Joined' : 'Join'}
+                        </button>
+                    </>
+                    :
+                    <p>Loading...</p>
+                    }
                 </div>
             </div>
         );

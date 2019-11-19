@@ -13,7 +13,6 @@ class Account extends Component {
       events: [],
       currentUser: null
     };
-
   }
   
   onEventsUpdate = querySnapshot => {
@@ -34,7 +33,7 @@ class Account extends Component {
   };
 
   onNotifsUpdate = querySnapshot => {
-    const notifications = [];
+    // const notifications = [];
     // querySnapshot.forEach(doc => {
     //   const { name, description } = doc.data();
     //   eventList.push({
@@ -45,19 +44,20 @@ class Account extends Component {
     //   });
     // });
     
-    this.setState({
-       notifications
-    });
+    // this.setState({
+    //    notifications
+    // });
   };
   
-  componentDidMount() {
+  async componentDidMount() {
     const userRef = db.doc(`users/${firebaseApp.auth().currentUser.uid}`);
-    userRef.get().then((doc) => {
+    await userRef.get().then((doc) => {
         this.setState({
           currentUser: {
             id: doc.id,
             ...doc.data()
-          }
+          },
+          notifications: doc.data().notifications
         })
       }
     )
@@ -72,7 +72,8 @@ class Account extends Component {
   }
   
   render() {
-    const { events, currentUser } = this.state;
+    console.log(this.state)
+    const { events, currentUser, notifications } = this.state;
     return (
       <div>
         <header>
@@ -94,6 +95,9 @@ class Account extends Component {
         <div className="content">
           <div className="notif-list">
             My Notifications
+            <ul>
+            {notifications.map(item => <li>{item}</li>)}
+            </ul>
           </div>
           <div className="event-list">
             My Events

@@ -16,7 +16,7 @@ class EventListItem extends Component {
         const { item } = this.props;
 
         return (
-            <div key={item.key} className="event-list-item" onClick={this.props.handleClick}>
+            <div className="event-list-item" onClick={this.props.handleClick}>
                 <div className="container">
                     <div className="row">
                         <div className="col">
