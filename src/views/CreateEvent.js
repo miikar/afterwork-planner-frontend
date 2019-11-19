@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { db } from '../Firebase/firebase';
+import firebase from 'firebase';
 
 class CreateEvent extends Component {
 
@@ -33,7 +34,7 @@ class CreateEvent extends Component {
         const date = e.target.value;
         
         // if date has not been picked yet,
-        if (!this.state.dates.includes(date)) {    
+        if (!this.state.dates.includes(date)) {
             this.setState({
             dates: [...this.state.dates, {date: date, votes: 0}]   
             });
@@ -50,9 +51,21 @@ class CreateEvent extends Component {
             description,
             location,
             threshold,
-            dates
+            dates,
+        })
+        .then(documentRef =>{
+            const eventId = documentRef.id;
 
-        }).then(() =>
+            db.collection('users').get()
+                .then(snapshot =>
+                    snapshot.forEach(doc => {
+                        doc.ref.update({
+                            notifications: firebase.firestore.FieldValue.arrayUnion(`New event ${this.state.name}`)
+                        })
+                    })
+                )
+        })
+        .then(() =>
             this.props.history.push('/dashboard')
         )
         .catch((error) => {

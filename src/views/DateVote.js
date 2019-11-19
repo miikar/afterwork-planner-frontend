@@ -15,7 +15,7 @@ const INIT_STATE = {
     ],
 }
 
-function DateVote({ currentUser, onSubmit }) {
+function DateVote({ currentUser, eventId }) {
 
     const [state, setDates] = useState(INIT_STATE)
 
@@ -36,6 +36,10 @@ function DateVote({ currentUser, onSubmit }) {
         })
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault()
+    }
+
     // useEffect(() => {
     //     function handleAddDate() {
     //         setDates({
@@ -45,17 +49,14 @@ function DateVote({ currentUser, onSubmit }) {
     // }, [])
 
     return(
-        <div className="form-group">
-            <label htmlFor="dates">Dates </label>
-            <div className="list-group">
+        <div className="container-fluid">
                 {state.dates.map(date => (
-                    <DateItem {...date} voted={date.votes.includes(currentUser)} onClickVote={() => handleVote(date)} />
+                    <DateItem key={date.key} {...date} voted={date.votes.includes(currentUser)} onClickVote={() => handleVote(date)} />
                 ))}
                 {/* <span className="list-group-item">
                     Add New Date
                 </span> */}
-            </div>
-            <button type="submit" className="btn btn-primary" onClick={onSubmit}>Submit</button>
+                <button style={{display: 'block', marginTop: '16px'}} type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
         </div>
     )
 }
