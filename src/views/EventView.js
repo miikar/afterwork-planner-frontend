@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { db, firebaseApp } from '../Firebase/firebase';
-
+import firebase from 'firebase/app';
 class EventView extends Component {
     constructor(props) {
         super(props);
@@ -13,36 +13,36 @@ class EventView extends Component {
     }
 
     async componentDidMount() {
-        this.ref = await db.collection('events').doc(this.props.match.params.eventId).get();
+        db.collection('events').doc(this.props.match.params.eventId).onSnapshot((doc) => {
+            this.setState({...doc.data()});
+        });
+
         this.setState({
-            ...this.ref.data(),
              loading: false
         });
     }
 
-    handleJoinClick = async () => {
+    handleJoinClick = () => {
         const update = {
-            interested: this.state.interested ? [...this.state.interested, this.state.uid] : [this.state.uid] // risk of race condition when multiple users try to join at once.
+            interested: firebase.firestore.FieldValue.arrayUnion(this.state.uid)
         };
-        try {
-            await db.collection('events').doc(this.props.match.params.eventId).update(update);
-            this.setState({ joined: true});
-        } catch (err) {
-            this.setState({ error: 'Could not join the event', showError: true });
-        }
+        
+        db.collection('events')
+            .doc(this.props.match.params.eventId)
+            .update(update)
+            .catch((e) => console.error(e));
+        
     }
 
-    handleConfirmClick = async () => {
+    handleConfirmClick = () => {
         const update = {
-            confirmed: this.state.confirmed ? [...this.state.confirmed, this.state.uid] : [this.state.uid]
+            confirmed: firebase.firestore.FieldValue.arrayUnion(this.state.uid)
         }
 
-        try {
-            await db.collection('events').doc(this.props.match.params.eventId).update(update);
-            this.setState({ confirmed: true });
-        } catch (err) {
-            this.setState({ error: 'Could not confirm participation.', showError: true });
-        }
+        db.collection('events')
+            .doc(this.props.match.params.eventId)
+            .update(update)
+            .catch((e) => console.error(e));
     }
 
     isInterested = () => {
