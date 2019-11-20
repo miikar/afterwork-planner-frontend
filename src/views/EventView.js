@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { db, firebaseApp } from '../Firebase/firebase';
 import firebase from 'firebase/app';
+import DateVote from './DateVote';
+
 class EventView extends Component {
     constructor(props) {
         super(props);
+        this.eventListener = null;
         this.state = {
             loading: true,
             user: null,
@@ -20,6 +23,12 @@ class EventView extends Component {
         this.setState({
              loading: false
         });
+
+        this.eventListener = db.collection('events').doc(this.props.match.params.eventId)
+            .onSnapshot(doc => {
+                console.log("interested")
+                console.log(doc.data())
+            });
     }
 
     handleJoinClick = () => {
@@ -53,7 +62,13 @@ class EventView extends Component {
         return this.state.confirmed && this.state.confirmed.includes(this.state.uid);
     }
 
+    componentWillUnmount() {
+        this.eventListener();
+    }
+
     render() {
+        const { user, name, description, dates } = this.state
+
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -65,12 +80,12 @@ class EventView extends Component {
 
                             { this.state.showError && <div class="alert alert-danger">{this.state.error}</div>}
                             { this.state.dates && this.state.dates.length > 0 &&
-                                <>
-                                    <h3>Suggested dates for event</h3>
-                                    <ul>
-                                        { this.state.dates.map(date => <li key={date.date}>{date.date}</li>) }
-                                    </ul>
-                                </>
+
+                              <>
+                                  <h3>Scheduling</h3>
+                                  <DateVote currentUser={user} eventId={this.props.match.params.eventId} />
+                                  {/* { this.state.dates.map(date => <li key={date.date}>{date.date}</li>) } */}
+                              </>
                             }
                             { !this.state.interested || this.state.interested.length < +(this.state.threshold) ?
                                 <button disabled={this.isInterested()} className={'btn btn-' + (this.isInterested() ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
@@ -83,8 +98,14 @@ class EventView extends Component {
                         </>
                         :
                         <p>Loading...</p>
-                        }
-                    </div>
+
+                        <button style={{display: 'block', marginTop: '16px'}} className={'btn btn-' + (this.state.joined ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
+                            {this.state.joined ? 'Joined' : 'Join'}
+                        </button>
+                    </>
+                    :
+                    <p>Loading...</p>
+                    }
                 </div>
             </div>
         );
