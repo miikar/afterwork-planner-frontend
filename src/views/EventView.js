@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { db, firebaseApp } from '../Firebase/firebase';
+import { auth, db, firebaseApp } from '../Firebase/firebase';
 import DateVote from './DateVote';
 
 class EventView extends Component {
@@ -8,10 +8,10 @@ class EventView extends Component {
         this.eventListener = null;
         this.state = {
             loading: true,
-            user: null,
             joined: false,
         };
-        firebaseApp.auth().onAuthStateChanged(user => this.state.uid = user.uid);
+     
+        this.currentUser = auth.currentUser.uid;
     }
 
     async componentDidMount() {
@@ -30,7 +30,7 @@ class EventView extends Component {
 
     handleJoinClick = async () => {
         const update = {
-            interested: this.state.interested ? [...this.state.interested, this.state.uid] : [this.state.uid]
+            interested: this.state.interested ? [...this.state.interested, this.currentUser] : [this.currentUser]
         };
         try {
             await db.collection('events').doc(this.props.match.params.eventId).update(update);
@@ -45,7 +45,7 @@ class EventView extends Component {
     }
 
     render() {
-        const { user, name, description, dates } = this.state
+        const { name, description, dates } = this.state
 
         return (
             <div className="container-fluid">
@@ -59,7 +59,7 @@ class EventView extends Component {
                         { this.state.dates && this.state.dates.length > 0 &&
                             <>
                                 <h3>Scheduling</h3>
-                                <DateVote currentUser={user} eventId={this.props.match.params.eventId} />
+                                <DateVote currentUser={this.currentUser} eventId={this.props.match.params.eventId} />
                                 {/* { this.state.dates.map(date => <li key={date.date}>{date.date}</li>) } */}
                             </>
                         }
