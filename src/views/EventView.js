@@ -10,7 +10,6 @@ class EventView extends Component {
         this.state = {
             loading: true,
             joined: false,
-            joined: false
         };
      
         this.currentUser = auth.currentUser.uid;
@@ -34,7 +33,7 @@ class EventView extends Component {
 
     handleJoinClick = () => {
         const update = {
-            interested: firebase.firestore.FieldValue.arrayUnion(this.state.uid)
+            interested: firebase.firestore.FieldValue.arrayUnion(this.currentUser)
         };
         
         db.collection('events')
@@ -46,7 +45,7 @@ class EventView extends Component {
 
     handleConfirmClick = () => {
         const update = {
-            confirmed: firebase.firestore.FieldValue.arrayUnion(this.state.uid)
+            confirmed: firebase.firestore.FieldValue.arrayUnion(this.currentUser)
         }
 
         db.collection('events')
@@ -56,11 +55,11 @@ class EventView extends Component {
     }
 
     isInterested = () => {
-        return this.state.interested && this.state.interested.includes(this.state.uid);
+        return this.state.interested && this.state.interested.includes(this.currentUser);
     }
 
     isConfirmed = () => {
-        return this.state.confirmed && this.state.confirmed.includes(this.state.uid);
+        return this.state.confirmed && this.state.confirmed.includes(this.currentUser);
     }
 
     componentWillUnmount() {
@@ -73,25 +72,23 @@ class EventView extends Component {
         return (
             <div className="container-fluid">
 
-                    { !this.state.loading 
-                        ?   <>
-                                <h1>{ this.state.name }</h1>
-                                <p>{ this.state.description }</p>
+                { !this.state.loading 
+                    ?   <>
+                            <h1>    { this.state.name }</h1>
+                            <p>{ this.state.description }</p>
 
-                                <h3>Scheduling</h3>
-                                <DateVote currentUser={this.currentUser} eventId={this.props.match.params.eventId} />
-                                { !this.state.interested || this.state.interested.length < +(this.state.threshold) 
-                                ?   <button disabled={this.isInterested()} className={'btn btn-' + (this.isInterested() ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
-                                        { this.isInterested() ? 'Joined' : 'Join'}
-                                    </button>
-                                :   <>  
-                                        <p>Please confirm your participation in this event.</p>
-                                        <button disabled={this.isConfirmed()} className="btn btn-primary" onClick={this.handleConfirmClick}>Confirm</button>
-                                    </>
-                                }
-                            </>
-                        : <p>Loading...</p>
-                    }
+                            <h3>Scheduling</h3>
+                            {!this.isInterested()
+                                ?   <p>Join to see the schedule</p>
+                                :   <DateVote currentUser={this.currentUser} eventId={this.props.match.params.eventId} />
+                            }
+
+                            <button disabled={this.isInterested()} className={'btn btn-' + (this.isInterested() ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
+                                { this.isInterested() ? 'Interested' : 'Join'}
+                            </button>
+                        </>
+                    : <p>Loading...</p>
+                }
             </div>
         );
     }
