@@ -7,7 +7,7 @@ export const BasicHeader = (props) => {
         <div className="row">
             <header>
                 <nav className="navbar fixed-top">
-                    <ul className={'nav container d-flex ' + (!props.canGoBack && 'justify-content-center')}>
+                    <ul className={'nav container d-flex' + (!props.canGoBack ? ' justify-content-center' : '')}>
                     { props && props.canGoBack && 
                         <li className="nav-item active">
                             <a className="text-left" href="/dashboard">Back</a>

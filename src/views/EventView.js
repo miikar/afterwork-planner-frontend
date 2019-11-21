@@ -34,7 +34,7 @@ class EventView extends Component {
 
     render() {
         return (
-            <div className="container-fluid px-0">
+            <div className="container-fluid">
                 <div className="row">
                     { BasicHeader({ canGoBack: true }) }
                 </div>
