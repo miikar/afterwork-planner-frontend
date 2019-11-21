@@ -32,7 +32,7 @@ export const AuthNav = () => {
                             <a href="/event/create">New</a>
                         </li>
                         <li className="nav-item">
-                            <a href="/">Account</a>
+                            <a href="/account">Account</a>
                         </li>
                     </ul>
                 </nav>
