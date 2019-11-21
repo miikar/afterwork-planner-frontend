@@ -101,15 +101,7 @@ class EventView extends Component {
                             }
                         </>
                         :
-                        <>
-                            <p>Loading...</p>
-
-                            <button style={{display: 'block', marginTop: '16px'}} className={'btn btn-' + (this.state.joined ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
-                                {this.state.joined ? 'Joined' : 'Join'}
-                            </button>
-                        </>
-                        }
-                        :
+                        
                         <p>Loading...</p>
                         }
                     </div>
