@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { auth, db, firebaseApp } from '../Firebase/firebase';
 import firebase from 'firebase/app';
 import DateVote from './DateVote';
+import { BasicHeader } from '../components/Navbar/Navbars';
 
 class EventView extends Component {
     constructor(props) {
@@ -71,6 +72,9 @@ class EventView extends Component {
 
         return (
             <div className="container-fluid">
+                <div className="row">
+                    { BasicHeader({ canGoBack: true }) }
+                </div>
 
                 { !this.state.loading 
                     ?   <>
