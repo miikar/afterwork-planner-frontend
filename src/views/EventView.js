@@ -36,7 +36,7 @@ class EventView extends Component {
         return (
             <div className="container-fluid px-0">
                 <div className="row">
-                    { BasicHeader() }
+                    { BasicHeader({ canGoBack: true }) }
                 </div>
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-xs-6 offset-xs-3">

@@ -1,12 +1,23 @@
 import React from 'react';
 import { firebaseApp } from '../../Firebase/firebase';
 
-export const BasicHeader = () => {
+export const BasicHeader = (props) => {
     return (
     <div className="col-md-12 px-0 mb-5">
-        <header className="text-center fixed-top">
-            <h1>Afterwork Planner</h1>
-        </header>
+        <div className="row">
+            <header>
+                <nav className="navbar fixed-top">
+                    <ul className="nav container d-flex">
+                    { props && props.canGoBack && 
+                        <li className="nav-item active">
+                            <a className="text-left" href="/dashboard">Back</a>
+                        </li>
+                    }
+                    <li><h4 className="text-center">Afterwork Planner</h4></li>
+                    </ul>
+                </nav>
+            </header>
+        </div>
     </div>
     );
 };
@@ -21,7 +32,7 @@ export const AuthNav = () => {
                             <a href="/event/create">New</a>
                         </li>
                         <li className="nav-item">
-                        <a href="/">Account</a>
+                            <a href="/">Account</a>
                         </li>
                     </ul>
                 </nav>

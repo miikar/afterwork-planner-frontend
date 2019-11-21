@@ -9,7 +9,7 @@ function Login() {
     return(
         <Router>
             <div className="App">
-                 { BasicHeader()}
+                 { BasicHeader({})}
             </div>
             <div className="col-md-6 offset-md-3 d-flex justify-content-center">
                 <Switch> 

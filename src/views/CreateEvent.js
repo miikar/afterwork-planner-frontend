@@ -84,7 +84,7 @@ class CreateEvent extends Component {
         return (
             <div className="container-fluid">
                 <div className="row">
-                    { BasicHeader() }
+                    { BasicHeader({ canGoBack: true }) }
                 </div>
                 <div className="row">
                     <div className="col-md-6 offset-md-3">
