@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { db, firebaseApp } from "../Firebase/firebase";
 import "./Account.css";
+import { AccountNav } from "../components/Navbar/Navbars";
 
 class Account extends Component {
   constructor(props) {
@@ -75,21 +76,7 @@ class Account extends Component {
     const { events, currentUser } = this.state;
     return (
       <div>
-        <header>
-          <nav className="navbar">
-            <ul className="nav container d-flex">
-              <li className="nav-item">
-                <a href="/dashboard">Done</a>
-              </li>
-              {!!currentUser
-                ? <li className="nav-item">{currentUser.displayName}</li>
-                : <li className="nav-item"></li>}
-              <li className="nav-item">
-                <a href="/" onClick={() => firebaseApp.auth().signOut()}>Sign Out</a>
-              </li>
-            </ul>
-          </nav>
-        </header>
+        { AccountNav({currentUser: this.state.currentUser, })}
       
         <div className="content">
           <div className="notif-list">

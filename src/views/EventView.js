@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { db, firebaseApp } from '../Firebase/firebase';
+import { BasicHeader } from '../components/Navbar/Navbars';
 
 class EventView extends Component {
     constructor(props) {
@@ -33,9 +34,12 @@ class EventView extends Component {
 
     render() {
         return (
-            <div className="container-fluid">
+            <div className="container-fluid px-0">
                 <div className="row">
-                    <div className="col-md-6 offset-md-3">
+                    { BasicHeader() }
+                </div>
+                <div className="row">
+                    <div className="col-md-6 offset-md-3 col-xs-6 offset-xs-3">
                         { !this.state.loading ?
                         <>
                             <h1>{ this.state.name }</h1>

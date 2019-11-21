@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { db } from '../Firebase/firebase';
+import { BasicHeader } from '../components/Navbar/Navbars';
 
 class CreateEvent extends Component {
 
@@ -83,11 +84,7 @@ class CreateEvent extends Component {
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-12">
-                        <header>
-                            <h1>Afterwork Planner</h1>
-                        </header>
-                    </div>
+                    { BasicHeader() }
                 </div>
                 <div className="row">
                     <div className="col-md-6 offset-md-3">
