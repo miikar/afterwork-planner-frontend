@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { db } from '../Firebase/firebase';
 import './Dashboard.css'
 import EventListItem from '../components/eventListItem';
+import { AuthNav } from '../components/Navbar/Navbars';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -37,19 +38,8 @@ class Dashboard extends Component {
     render() {
         const { eventList } = this.state;
         return (
-            <div>
-                <header>
-                    <nav className="navbar">
-                        <ul className="nav container d-flex">
-                            <li className="nav-item active">
-                                <a href="/event/create">New</a>
-                            </li>
-                            <li className="nav-item">
-                                <a href="/account">Account</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </header>
+            <>
+                { AuthNav() }
     
                 <div className="content">
                     <h1 id="dashboard-title">Upcoming events</h1>
@@ -59,7 +49,7 @@ class Dashboard extends Component {
                         })}
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
   
