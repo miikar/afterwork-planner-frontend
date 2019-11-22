@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { auth, db } from '../Firebase/firebase';
-import firebase from 'firebase';
 import { BasicHeader } from '../components/Navbar/Navbars';
 
 class CreateEvent extends Component {
@@ -18,7 +17,6 @@ class CreateEvent extends Component {
     }
 
     onChange = (e) => {
-        console.log("CHANGE STATE1")
         const state = this.state;
         state[e.target.name]  = e.target.value;
         this.setState(state);
@@ -51,18 +49,20 @@ class CreateEvent extends Component {
             location,
             threshold,
             dates,
+            confirmed: {date:null, status: false, votes:[]},
+            interested: [auth.currentUser.uid]
         })
         .then(documentRef =>{
-            const eventId = documentRef.id;
+            // const eventId = documentRef.id;
 
-            db.collection('users').get()
-                .then(snapshot =>
-                    snapshot.forEach(doc => {
-                        doc.ref.update({
-                            notifications: firebase.firestore.FieldValue.arrayUnion(`New event ${this.state.name}`)
-                        })
-                    })
-                )
+            // db.collection('users').get()
+            //     .then(snapshot =>
+            //         snapshot.forEach(doc => {
+            //             doc.ref.update({
+            //                 notifications: firebase.firestore.FieldValue.arrayUnion(`New event ${this.state.name}`)
+            //             })
+            //         })
+            //     )
         })
         .then(() =>
             this.props.history.push('/dashboard')

@@ -12,8 +12,10 @@ class Account extends Component {
     this.state = {
       notifications: [],
       events: [],
-      currentUser: null
+      currentUser: null,
+      loading: true,
     };
+
   }
   
   onEventsUpdate = querySnapshot => {
@@ -58,10 +60,12 @@ class Account extends Component {
             id: doc.id,
             ...doc.data()
           },
-          notifications: doc.data().notifications
+          // notifications: doc.data().notifications
         })
       }
-    )
+    ).then(() => {
+      this.setState({loading: false})
+    })
 
     // this.listenEvents = this.ref.onSnapshot(this.onCollectionUpdate);
     // this.listenNotifs = this.ref.onSnapshot(this.onCollectionUpdate);
@@ -73,36 +77,40 @@ class Account extends Component {
   }
   
   render() {
-    console.log(this.state)
-    const { events, currentUser, notifications } = this.state;
+    const { events } = this.state;
     return (
-      <div>
-        { AccountNav({currentUser: this.state.currentUser, })}
-      
-        <div className="content">
-          <div className="notif-list">
-            My Notifications
-            <ul>
-            {notifications.map(item => <li>{item}</li>)}
-            </ul>
-          </div>
-          <div className="event-list">
-            My Events
-            {events.map(item => {
-              return (
-                <div key={item.key} className="event-list-item">
-                  <div className="container">
-                    <div className="row">
-                      <div className="col">{item.name}</div>
-                      <div className="col">{item.description}</div>
+      <>
+      {!this.state.loading
+          ? <div>
+            { AccountNav({currentUser: this.state.currentUser, })}
+          
+            <div className="content">
+              <div className="notif-list">
+                My Notifications
+                {/* <ul>
+                {notifications.map(item => <li>{item}</li>)}
+                </ul> */}
+              </div>
+              <div className="event-list">
+                My Events
+                {events.map(item => {
+                  return (
+                    <div key={item.key} className="event-list-item">
+                      <div className="container">
+                        <div className="row">
+                          <div className="col">{item.name}</div>
+                          <div className="col">{item.description}</div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                );
-            })}
+                    );
+                })}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        : <></>
+      }
+      </>
     );
   }
 }

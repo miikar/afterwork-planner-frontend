@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import DateItem from './DateItem';
-import { db, auth } from '../Firebase/firebase';
-import firebase from 'firebase';
+import { db } from '../Firebase/firebase';
+
+import './DateVote.css';
 
 function DateVote({ currentUser, eventId }) {
 
+    // const [loading, setLoading] = useState(true)
     const [dates, setDates] = useState([]);
     const [threshold, setThreshold] = useState(Infinity);
     const [confirmedDate, setConfirmed] = useState({date:null, status: false, votes:[]});
@@ -69,6 +71,8 @@ function DateVote({ currentUser, eventId }) {
             var map1 = fetchDates.reduce((a, o) => ({...a, ...{[o.date]: o}}), {}),
                 map2 = dates.reduce((a, o) => ({...a, ...{[o.date]: o}}), {});
  
+
+            // TODO: this doesn't do anything currently
             Object.keys(map1).forEach(k => {
                 if (map2[k]) {
                     // Merge dates that exist in both states
@@ -130,7 +134,7 @@ function DateVote({ currentUser, eventId }) {
                             onClickConfirm={() => handleConfirm(confirmedDate)}/>
                 }
 
-                <button style={{display: 'block', marginTop: '16px'}} type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+                <button style={{display: 'block', marginTop: '16px'}} type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit Votes</button>
         </div>
     )
 }

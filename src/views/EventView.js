@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { auth, db, firebaseApp } from '../Firebase/firebase';
+import { auth, db } from '../Firebase/firebase';
 import firebase from 'firebase/app';
 import DateVote from './DateVote';
 import { BasicHeader } from '../components/Navbar/Navbars';
@@ -68,7 +68,6 @@ class EventView extends Component {
     }
 
     render() {
-        const { name, description, dates } = this.state
 
         return (
             <div className="container-fluid">
@@ -78,16 +77,20 @@ class EventView extends Component {
 
                 { !this.state.loading 
                     ?   <>
-                            <h1>    { this.state.name }</h1>
+                            <div className="d-flex align-items-center">
+                                <h1>{ this.state.name }</h1>
+                                <span style={{display:'block'}}>, { this.state.location } </span> 
+                            </div>
                             <p>{ this.state.description }</p>
+                            <p></p>
 
-                            <h3>Scheduling</h3>
+                            <h3>Dates</h3>
                             {!this.isInterested()
                                 ?   <p>Join to see the schedule</p>
                                 :   <DateVote currentUser={this.currentUser} eventId={this.props.match.params.eventId} />
                             }
 
-                            <button disabled={this.isInterested()} className={'btn btn-' + (this.isInterested() ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
+                            <button style={{marginTop:'16px'}} disabled={this.isInterested()} className={'btn btn-' + (this.isInterested() ? 'success' : 'primary')} onClick={() => this.handleJoinClick()} >
                                 { this.isInterested() ? 'Interested' : 'Join'}
                             </button>
                         </>

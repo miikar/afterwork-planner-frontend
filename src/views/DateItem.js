@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import './DateItem.css'
 import { db } from '../Firebase/firebase';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 function DateItem({ date, threshold, canConfirm, votes, readonly, voted, confirmed, onClickVote, onClickConfirm }) {
     //canConfirm=true
-
     const [users, setUsers] = useState([])
 
     useEffect(() => {
-        return db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', votes)
-                    .onSnapshot(querySnapshot => {
-                        var usr = []
-                        querySnapshot.forEach(doc => {
-                            usr.push(doc.data().displayName)
-                        })
-                        setUsers(usr);
-                    });
+        if (votes.length > 0) {
+            return db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', votes)
+            .onSnapshot(querySnapshot => {
+                var usr = []
+                querySnapshot.forEach(doc => {
+                    usr.push(doc.data().displayName)
+                })
+                setUsers(usr);
+            });
+    
+        } else {
+            return setUsers([])
+        }
     }, [votes])
 
     return (
@@ -41,8 +45,8 @@ function DateItem({ date, threshold, canConfirm, votes, readonly, voted, confirm
                         </div>
                         <div className="col-4 d-flex align-items-center justify-content-center" onClick={onClickVote}>
                             {voted
-                                ? <span className="emoji">✅</span>
-                                : <span className="emoji">❌</span>
+                                ? <span className="emoji" role="img" aria-label="green checkmarck">✅</span>
+                                : <span className="emoji" role="img" aria-label="red checkmark">❌</span>
                             }
                         </div>
                     </>
@@ -71,7 +75,7 @@ function DateItem({ date, threshold, canConfirm, votes, readonly, voted, confirm
         {users.map((name, index) => (
         <div key={index} className="row no-gutters">
             <div className="col-12">
-                <span>{name}</span>
+                <span className="user">{name}</span>
             </div>
         </div>
 

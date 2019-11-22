@@ -9,16 +9,9 @@ import EventView from "./views/EventView";
 import DateVote from "./views/DateVote";
 
 class App extends React.Component {
-  constructor() {
-    super();
-
-    // this.state = {
-    //   currentUser: null
-    // };
-  }
 
   componentDidMount() {
-    // TODO: get user here and pass it in props
+    // TODO: set user state to localstorage here
   }
 
   render() {

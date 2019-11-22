@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './eventListItem.css';
 
 class EventListItem extends Component {
     constructor(props) {
@@ -20,13 +21,32 @@ class EventListItem extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col">
-                            {item.name}
-                        </div>
-                        <div className="col">
-                            {item.description}
+                            <span>{item.name}</span>
                         </div>
                     </div>
-                    <button className="btn btn-primary">I'm interested</button>
+                    <div className="row">
+                        <div className="col">
+                            {!!item.confirmedDate
+                                ?   <>
+                                        {!item.confirmedStatus
+                                            ?   <span className="votes">Date: Confirming, {item.confirmedDate}</span>
+                                            :   <span className="votes">Date: {item.confirmedDate}</span>
+                                        }
+                                    </>
+                                : <span className="votes">Date: Voting...</span>
+                            }
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col">
+                            {!!item.confirmedDate && item.confirmedStatus
+                                ?   <span className="votes">Confirmed: {item.confirmedVotes.length}/{item.threshold}</span>
+                                :   <span className="votes">Interested: {item.interested.length}/{item.threshold}</span>
+                            }
+                        </div>
+                        <div className="col"></div>
+                    </div>
+                    {/* <button className="btn btn-primary">I'm interested</button> */}
                 </div>
             </div>
         );

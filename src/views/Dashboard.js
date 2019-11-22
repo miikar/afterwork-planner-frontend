@@ -17,17 +17,22 @@ class Dashboard extends Component {
   onCollectionUpdate = querySnapshot => {
     const eventList = [];
     querySnapshot.forEach(doc => {
-      const { name, description } = doc.data();
+      const { name, description, confirmed, interested, threshold } = doc.data();
       eventList.push({
         key: doc.id,
         doc, // DocumentSnapshot
         name,
-        description
+        description,
+        interested,
+        confirmedDate: confirmed.date,
+        confirmedStatus: confirmed.status,
+        confirmedVotes: confirmed.votes,
+        threshold,
       });
     });
 
     this.setState({
-      eventList
+      eventList: eventList
     });
   };
 

@@ -2,3 +2,7 @@ div > span {
     font-size: 26px;
     vertical-align: middle;
   }
+
+span.user {
+    font-size: medium;
+}
